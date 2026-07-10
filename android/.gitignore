@@ -1,0 +1,70 @@
+# Gradle files
+.gradle/
+build/
+*.jar
+*.jks
+*.keystore
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Flutter/Dart/Pub related
+**/doc/api/
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# Idea
+.idea/
+*.iml
+*.ipr
+*.iws
+.classpath
+.c9/
+*.class
+*.log
+*.pyc
+*.swp
+*.swo
+*~
+.DS_Store
+.atom/
+.buildlog
+.history
+.svn/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.iws
+*.ipr
+*.ids
+*.orig
+*.swp
+*.swo
+*~
+.webassets-cache
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may want to be tracked by git if you want to share the launch
+# configuration with team members. However, if you personalize your launch
+# configuration, you should not commit it to the version-control system.
+# Read more about launch.json at: https://code.visualstudio.com/docs/editor/debugging
+.vscode/
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/settings.json
+!.vscode/tasks.json
+
+# Miscellaneous
+/android/local.properties
+*.lock
