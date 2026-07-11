@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
+import '../services/image_picker_service.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
+
+  Future<void> _selectImage() async {
+    final image = await ImagePickerService.pickImage();
+
+    if (image != null) {
+      debugPrint('Selected image: ${image.path}');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +38,7 @@ class HomeScreen extends StatelessWidget {
               ),
               const SizedBox(height: 32),
               FilledButton.icon(
-                onPressed: () {},
+                onPressed: _selectImage,
                 icon: const Icon(Icons.image),
                 label: const Text('Select image'),
               ),
