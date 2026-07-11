@@ -22,6 +22,14 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  void _onImageTap(TapDownDetails details) {
+    final position = details.localPosition;
+
+    debugPrint(
+      'Tapped at: (${position.dx.toStringAsFixed(1)}, ${position.dy.toStringAsFixed(1)})',
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,13 +44,16 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if (selectedImagePath != null)
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
-                  child: Image.file(
-                    File(selectedImagePath!),
-                    height: 250,
-                    width: 250,
-                    fit: BoxFit.cover,
+                GestureDetector(
+                  onTapDown: _onImageTap,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: Image.file(
+                      File(selectedImagePath!),
+                      height: 250,
+                      width: 250,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 )
               else
@@ -51,19 +62,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   size: 96,
                   color: Theme.of(context).colorScheme.primary,
                 ),
-
               const SizedBox(height: 24),
-
               Text(
                 selectedImagePath != null
-                    ? 'Image selected'
+                    ? 'Tap anywhere on the image'
                     : 'Pick a color from an image',
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
-
               const SizedBox(height: 32),
-
               FilledButton.icon(
                 onPressed: _selectImage,
                 icon: const Icon(Icons.image),
