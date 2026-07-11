@@ -1,5 +1,9 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image/image.dart' as img;
+
+import '../services/color_picker_service.dart';
 import '../services/image_picker_service.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -11,6 +15,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String? selectedImagePath;
+  Color? selectedColor;
 
   Future<void> _selectImage() async {
     final image = await ImagePickerService.pickImage();
@@ -18,16 +23,42 @@ class _HomeScreenState extends State<HomeScreen> {
     if (image != null) {
       setState(() {
         selectedImagePath = image.path;
+        selectedColor = null;
       });
     }
   }
 
-  void _onImageTap(TapDownDetails details) {
-    final position = details.localPosition;
+  Future<void> _onImageTap(TapDownDetails details) async {
+    if (selectedImagePath == null) return;
 
-    debugPrint(
-      'Tapped at: (${position.dx.toStringAsFixed(1)}, ${position.dy.toStringAsFixed(1)})',
+    final bytes = await File(selectedImagePath!).readAsBytes();
+    final image = img.decodeImage(bytes);
+
+    if (image == null) return;
+
+    const displayedSize = 250.0;
+
+    final scaleX = image.width / displayedSize;
+    final scaleY = image.height / displayedSize;
+
+    final x = (details.localPosition.dx * scaleX).toInt();
+    final y = (details.localPosition.dy * scaleY).toInt();
+
+    final color = await ColorPickerService.getPixelColor(
+      imagePath: selectedImagePath!,
+      x: x,
+      y: y,
     );
+
+    if (color != null) {
+      setState(() {
+        selectedColor = color;
+      });
+
+      debugPrint(
+        'Color: #${color.value.toRadixString(16).substring(2).toUpperCase()}',
+      );
+    }
   }
 
   @override
@@ -52,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       File(selectedImagePath!),
                       height: 250,
                       width: 250,
-                      fit: BoxFit.cover,
+                      fit: BoxFit.contain,
                     ),
                   ),
                 )
@@ -62,15 +93,33 @@ class _HomeScreenState extends State<HomeScreen> {
                   size: 96,
                   color: Theme.of(context).colorScheme.primary,
                 ),
+
               const SizedBox(height: 24),
+
+              if (selectedColor != null)
+                Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    color: selectedColor,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                ),
+
+              const SizedBox(height: 24),
+
               Text(
-                selectedImagePath != null
-                    ? 'Tap anywhere on the image'
-                    : 'Pick a color from an image',
+                selectedColor != null
+                    ? 'Color selected'
+                    : selectedImagePath != null
+                        ? 'Tap anywhere on the image'
+                        : 'Pick a color from an image',
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
+
               const SizedBox(height: 32),
+
               FilledButton.icon(
                 onPressed: _selectImage,
                 icon: const Icon(Icons.image),
