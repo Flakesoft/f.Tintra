@@ -1,14 +1,24 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import '../services/image_picker_service.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  String? selectedImagePath;
 
   Future<void> _selectImage() async {
     final image = await ImagePickerService.pickImage();
 
     if (image != null) {
-      debugPrint('Selected image: ${image.path}');
+      setState(() {
+        selectedImagePath = image.path;
+      });
     }
   }
 
@@ -25,18 +35,35 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                Icons.colorize,
-                size: 96,
-                color: Theme.of(context).colorScheme.primary,
-              ),
+              if (selectedImagePath != null)
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: Image.file(
+                    File(selectedImagePath!),
+                    height: 250,
+                    width: 250,
+                    fit: BoxFit.cover,
+                  ),
+                )
+              else
+                Icon(
+                  Icons.colorize,
+                  size: 96,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+
               const SizedBox(height: 24),
+
               Text(
-                'Pick a color from an image',
+                selectedImagePath != null
+                    ? 'Image selected'
+                    : 'Pick a color from an image',
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
+
               const SizedBox(height: 32),
+
               FilledButton.icon(
                 onPressed: _selectImage,
                 icon: const Icon(Icons.image),
