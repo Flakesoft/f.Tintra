@@ -5,6 +5,7 @@ import 'package:image/image.dart' as img;
 
 import '../models/image_state.dart';
 import '../services/image_picker_service.dart';
+import '../widgets/color_info_card.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -113,13 +114,8 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 24),
 
               if (imageState?.selectedColor != null)
-                Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    color: imageState!.selectedColor,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
+                ColorInfoCard(
+                  color: imageState!.selectedColor!,
                 ),
 
               const SizedBox(height: 24),
