@@ -13,7 +13,11 @@ class ColorInfoCard extends StatelessWidget {
   }
 
   String get rgb {
-    return 'RGB(${color.red}, ${color.green}, ${color.blue})';
+    final r = (color.r * 255).round();
+    final g = (color.g * 255).round();
+    final b = (color.b * 255).round();
+
+    return 'RGB($r, $g, $b)';
   }
 
   @override
