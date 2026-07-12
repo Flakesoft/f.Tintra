@@ -26,10 +26,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (decodedImage == null) return;
 
+    final resizedImage = img.copyResize(
+      decodedImage,
+      width: 1000,
+    );
+
     setState(() {
       imageState = ImageState(
         path: imageFile.path,
-        image: decodedImage,
+        image: resizedImage,
       );
     });
   }
