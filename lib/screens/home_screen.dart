@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as img;
 
-import '../services/color_picker_service.dart';
+import '../models/image_state.dart';
 import '../services/image_picker_service.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -14,51 +14,62 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String? selectedImagePath;
-  Color? selectedColor;
+  ImageState? imageState;
 
   Future<void> _selectImage() async {
-    final image = await ImagePickerService.pickImage();
+    final imageFile = await ImagePickerService.pickImage();
 
-    if (image != null) {
-      setState(() {
-        selectedImagePath = image.path;
-        selectedColor = null;
-      });
-    }
+    if (imageFile == null) return;
+
+    final bytes = await imageFile.readAsBytes();
+    final decodedImage = img.decodeImage(bytes);
+
+    if (decodedImage == null) return;
+
+    setState(() {
+      imageState = ImageState(
+        path: imageFile.path,
+        image: decodedImage,
+      );
+    });
   }
 
-  Future<void> _onImageTap(TapDownDetails details) async {
-    if (selectedImagePath == null) return;
-
-    final bytes = await File(selectedImagePath!).readAsBytes();
-    final image = img.decodeImage(bytes);
-
-    if (image == null) return;
+  void _onImageTap(TapDownDetails details) {
+    if (imageState == null) return;
 
     const displayedSize = 250.0;
 
-    final scaleX = image.width / displayedSize;
-    final scaleY = image.height / displayedSize;
+    final scaleX = imageState!.image.width / displayedSize;
+    final scaleY = imageState!.image.height / displayedSize;
 
     final x = (details.localPosition.dx * scaleX).toInt();
     final y = (details.localPosition.dy * scaleY).toInt();
 
-    final color = await ColorPickerService.getPixelColor(
-      imagePath: selectedImagePath!,
-      x: x,
-      y: y,
+    if (x < 0 ||
+        y < 0 ||
+        x >= imageState!.image.width ||
+        y >= imageState!.image.height) {
+      return;
+    }
+
+    final pixel = imageState!.image.getPixel(x, y);
+
+    final color = Color.fromARGB(
+      pixel.a.toInt(),
+      pixel.r.toInt(),
+      pixel.g.toInt(),
+      pixel.b.toInt(),
     );
 
-    if (color != null) {
-      setState(() {
-        selectedColor = color;
-      });
-
-      debugPrint(
-        'Color: #${color.toARGB32().toRadixString(16).substring(2).toUpperCase()}',
+    setState(() {
+      imageState = imageState!.copyWith(
+        selectedColor: color,
       );
-    }
+    });
+
+    debugPrint(
+      'Color: #${color.toARGB32().toRadixString(16).substring(2).toUpperCase()}',
+    );
   }
 
   @override
@@ -74,13 +85,13 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (selectedImagePath != null)
+              if (imageState != null)
                 GestureDetector(
                   onTapDown: _onImageTap,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(16),
                     child: Image.file(
-                      File(selectedImagePath!),
+                      File(imageState!.path),
                       height: 250,
                       width: 250,
                       fit: BoxFit.contain,
@@ -96,12 +107,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
               const SizedBox(height: 24),
 
-              if (selectedColor != null)
+              if (imageState?.selectedColor != null)
                 Container(
                   width: 80,
                   height: 80,
                   decoration: BoxDecoration(
-                    color: selectedColor,
+                    color: imageState!.selectedColor,
                     borderRadius: BorderRadius.circular(16),
                   ),
                 ),
@@ -109,9 +120,9 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 24),
 
               Text(
-                selectedColor != null
+                imageState?.selectedColor != null
                     ? 'Color selected'
-                    : selectedImagePath != null
+                    : imageState != null
                         ? 'Tap anywhere on the image'
                         : 'Pick a color from an image',
                 textAlign: TextAlign.center,
