@@ -27,27 +27,26 @@ class _HomeScreenState extends State<HomeScreen> {
       isLoading = true;
     });
 
-    await Future.delayed(const Duration(milliseconds: 750));
+    await Future.delayed(const Duration(milliseconds: 300));
 
     final bytes = await imageFile.readAsBytes();
 
-    final decodedImage = await Future(() {
-      return img.decodeImage(bytes);
-    });
+    final decodedImage = img.decodeImage(bytes);
 
     if (decodedImage == null) {
+      if (!mounted) return;
+
       setState(() {
         isLoading = false;
       });
+
       return;
     }
 
-    final resizedImage = await Future(() {
-      return img.copyResize(
-        decodedImage,
-        width: 800,
-      );
-    });
+    final resizedImage = img.copyResize(
+      decodedImage,
+      width: 800,
+    );
 
     if (!mounted) return;
 
@@ -117,14 +116,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     ? Column(
                         key: const ValueKey('loading'),
                         children: [
-                          const SizedBox(
-                            width: 80,
-                            height: 80,
-                            child: CircularProgressIndicator(),
+                          Icon(
+                            Icons.hourglass_top,
+                            size: 72,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .primary,
                           ),
                           const SizedBox(height: 20),
                           Text(
-                            'Processing image...',
+                            'Loading image...',
                             style: Theme.of(context)
                                 .textTheme
                                 .titleMedium,
