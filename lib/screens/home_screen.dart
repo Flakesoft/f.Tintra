@@ -28,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
 
     // Daj Flutteru vremena da nacrta loading UI
-    await Future.delayed(const Duration(milliseconds: 50));
+    await Future.delayed(const Duration(milliseconds: 150));
 
     final bytes = await imageFile.readAsBytes();
 
