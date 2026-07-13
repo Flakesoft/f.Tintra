@@ -16,16 +16,26 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   ImageState? imageState;
+  bool isLoading = false;
 
   Future<void> _selectImage() async {
     final imageFile = await ImagePickerService.pickImage();
 
     if (imageFile == null) return;
 
+    setState(() {
+      isLoading = true;
+    });
+
     final bytes = await imageFile.readAsBytes();
     final decodedImage = img.decodeImage(bytes);
 
-    if (decodedImage == null) return;
+    if (decodedImage == null) {
+      setState(() {
+        isLoading = false;
+      });
+      return;
+    }
 
     final resizedImage = img.copyResize(
       decodedImage,
@@ -37,6 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
         path: imageFile.path,
         image: resizedImage,
       );
+      isLoading = false;
     });
   }
 
@@ -91,7 +102,13 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (imageState != null)
+              if (isLoading)
+                const SizedBox(
+                  width: 96,
+                  height: 96,
+                  child: CircularProgressIndicator(),
+                )
+              else if (imageState != null)
                 GestureDetector(
                   onTapDown: _onImageTap,
                   child: ClipRRect(
@@ -121,11 +138,13 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 24),
 
               Text(
-                imageState?.selectedColor != null
-                    ? 'Color selected'
-                    : imageState != null
-                        ? 'Tap anywhere on the image'
-                        : 'Pick a color from an image',
+                isLoading
+                    ? 'Processing image...'
+                    : imageState?.selectedColor != null
+                        ? 'Color selected'
+                        : imageState != null
+                            ? 'Tap anywhere on the image'
+                            : 'Pick a color from an image',
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
@@ -133,7 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 32),
 
               FilledButton.icon(
-                onPressed: _selectImage,
+                onPressed: isLoading ? null : _selectImage,
                 icon: const Icon(Icons.image),
                 label: const Text('Select image'),
               ),
