@@ -10,18 +10,23 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
   cupertino_icons: ^1.0.2
-  # Color picker libraries
+
   flutter_colorpicker: ^1.0.3
   color: ^3.0.0
-  # State management (optional)
+
   provider: ^6.0.0
+
   image_picker: ^1.2.0
   image: ^4.5.4
+
+  dynamic_color: ^1.7.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
   flutter_lints: ^3.0.0
 
 flutter:
