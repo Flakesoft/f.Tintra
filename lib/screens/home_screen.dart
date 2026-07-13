@@ -54,10 +54,10 @@ class _HomeScreenState extends State<HomeScreen> {
   void _onImageTap(TapDownDetails details) {
     if (imageState == null) return;
 
-    const displayedSize = 250.0;
+    final imageSize = MediaQuery.of(context).size.width * 0.8;
 
-    final scaleX = imageState!.image.width / displayedSize;
-    final scaleY = imageState!.image.height / displayedSize;
+    final scaleX = imageState!.image.width / imageSize;
+    final scaleY = imageState!.image.height / imageSize;
 
     final x = (details.localPosition.dx * scaleX).toInt();
     final y = (details.localPosition.dy * scaleY).toInt();
@@ -83,78 +83,92 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedColor: color,
       );
     });
-
-    debugPrint(
-      'Color: #${color.toARGB32().toRadixString(16).substring(2).toUpperCase()}',
-    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final imageSize = MediaQuery.of(context).size.width * 0.8;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('f.Tintra'),
         centerTitle: true,
       ),
       body: Center(
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (isLoading)
-                const SizedBox(
-                  width: 96,
-                  height: 96,
-                  child: CircularProgressIndicator(),
-                )
-              else if (imageState != null)
-                GestureDetector(
-                  onTapDown: _onImageTap,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
-                    child: Image.file(
-                      File(imageState!.path),
-                      height: 250,
-                      width: 250,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                )
-              else
-                Icon(
-                  Icons.colorize,
-                  size: 96,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 250),
+                child: isLoading
+                    ? Column(
+                        key: const ValueKey('loading'),
+                        children: [
+                          const SizedBox(
+                            width: 80,
+                            height: 80,
+                            child: CircularProgressIndicator(),
+                          ),
+                          const SizedBox(height: 20),
+                          Text(
+                            'Processing image...',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium,
+                          ),
+                        ],
+                      )
+                    : imageState != null
+                        ? GestureDetector(
+                            key: const ValueKey('image'),
+                            onTapDown: _onImageTap,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: Image.file(
+                                File(imageState!.path),
+                                height: imageSize,
+                                width: imageSize,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                          )
+                        : Icon(
+                            Icons.colorize,
+                            key: const ValueKey('empty'),
+                            size: 96,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .primary,
+                          ),
+              ),
 
               const SizedBox(height: 24),
 
               if (imageState?.selectedColor != null)
                 ColorInfoCard(
                   color: imageState!.selectedColor!,
+                )
+              else if (imageState != null)
+                Text(
+                  'Tap the image to pick a color',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium,
                 ),
-
-              const SizedBox(height: 24),
-
-              Text(
-                isLoading
-                    ? 'Processing image...'
-                    : imageState?.selectedColor != null
-                        ? 'Color selected'
-                        : imageState != null
-                            ? 'Tap anywhere on the image'
-                            : 'Pick a color from an image',
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
 
               const SizedBox(height: 32),
 
               FilledButton.icon(
                 onPressed: isLoading ? null : _selectImage,
                 icon: const Icon(Icons.image),
-                label: const Text('Select image'),
+                label: Text(
+                  imageState == null
+                      ? 'Select image'
+                      : 'Choose another image',
+                ),
               ),
             ],
           ),
