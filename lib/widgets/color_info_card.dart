@@ -80,6 +80,13 @@ class ColorInfoCard extends StatelessWidget {
             ),
           ),
         ),
+
+        const SizedBox(height: 12),
+
+        Text(
+          'Tap the value to copy',
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
       ],
     );
   }
