@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class ColorInfoCard extends StatelessWidget {
   final Color color;
@@ -20,6 +21,19 @@ class ColorInfoCard extends StatelessWidget {
     return 'RGB($r, $g, $b)';
   }
 
+  Future<void> _copyText(BuildContext context, String text, String label) async {
+    await Clipboard.setData(ClipboardData(text: text));
+
+    if (!context.mounted) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('$label copied'),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -35,16 +49,36 @@ class ColorInfoCard extends StatelessWidget {
 
         const SizedBox(height: 12),
 
-        Text(
-          hex,
-          style: Theme.of(context).textTheme.titleLarge,
+        InkWell(
+          borderRadius: BorderRadius.circular(8),
+          onTap: () => _copyText(context, hex, 'HEX'),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 8,
+              vertical: 4,
+            ),
+            child: Text(
+              hex,
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+          ),
         ),
 
         const SizedBox(height: 4),
 
-        Text(
-          rgb,
-          style: Theme.of(context).textTheme.bodyMedium,
+        InkWell(
+          borderRadius: BorderRadius.circular(8),
+          onTap: () => _copyText(context, rgb, 'RGB'),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 8,
+              vertical: 4,
+            ),
+            child: Text(
+              rgb,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          ),
         ),
       ],
     );
