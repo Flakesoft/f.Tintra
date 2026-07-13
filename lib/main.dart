@@ -1,4 +1,7 @@
+
 import 'package:flutter/material.dart';
+import 'package:dynamic_color/dynamic_color.dart';
+
 import 'screens/home_screen.dart';
 
 void main() {
@@ -10,14 +13,35 @@ class FTintraApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'f.Tintra',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorSchemeSeed: Colors.blue,
-        useMaterial3: true,
-      ),
-      home: const HomeScreen(),
+    return DynamicColorBuilder(
+      builder: (lightDynamic, darkDynamic) {
+        return MaterialApp(
+          title: 'f.Tintra',
+          debugShowCheckedModeBanner: false,
+
+          themeMode: ThemeMode.system,
+
+          theme: ThemeData(
+            colorScheme: lightDynamic ??
+                ColorScheme.fromSeed(
+                  seedColor: Colors.blue,
+                  brightness: Brightness.light,
+                ),
+            useMaterial3: true,
+          ),
+
+          darkTheme: ThemeData(
+            colorScheme: darkDynamic ??
+                ColorScheme.fromSeed(
+                  seedColor: Colors.blue,
+                  brightness: Brightness.dark,
+                ),
+            useMaterial3: true,
+          ),
+
+          home: const HomeScreen(),
+        );
+      },
     );
   }
 }
