@@ -27,8 +27,14 @@ class _HomeScreenState extends State<HomeScreen> {
       isLoading = true;
     });
 
+    // Daj Flutteru vremena da nacrta loading UI
+    await Future.delayed(const Duration(milliseconds: 50));
+
     final bytes = await imageFile.readAsBytes();
-    final decodedImage = img.decodeImage(bytes);
+
+    final decodedImage = await Future(() {
+      return img.decodeImage(bytes);
+    });
 
     if (decodedImage == null) {
       setState(() {
@@ -37,16 +43,21 @@ class _HomeScreenState extends State<HomeScreen> {
       return;
     }
 
-    final resizedImage = img.copyResize(
-      decodedImage,
-      width: 1000,
-    );
+    final resizedImage = await Future(() {
+      return img.copyResize(
+        decodedImage,
+        width: 800,
+      );
+    });
+
+    if (!mounted) return;
 
     setState(() {
       imageState = ImageState(
         path: imageFile.path,
         image: resizedImage,
       );
+
       isLoading = false;
     });
   }
@@ -126,7 +137,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             key: const ValueKey('image'),
                             onTapDown: _onImageTap,
                             child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
+                              borderRadius:
+                                  BorderRadius.circular(20),
                               child: Image.file(
                                 File(imageState!.path),
                                 height: imageSize,
@@ -154,9 +166,8 @@ class _HomeScreenState extends State<HomeScreen> {
               else if (imageState != null)
                 Text(
                   'Tap the image to pick a color',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium,
+                  style:
+                      Theme.of(context).textTheme.bodyMedium,
                 ),
 
               const SizedBox(height: 32),
