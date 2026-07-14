@@ -1,5 +1,3 @@
-import java.util.Properties
-
 plugins {
     id("com.android.application")
     id("dev.flutter.flutter-gradle-plugin")
@@ -25,7 +23,12 @@ android {
 
     signingConfigs {
         create("release") {
-            storeFile = file(System.getenv("ANDROID_KEYSTORE_PATH") ?: "")
+            val keystorePath = System.getenv("ANDROID_KEYSTORE_PATH")
+
+            if (keystorePath != null) {
+                storeFile = file("android/app/$keystorePath")
+            }
+
             storePassword = System.getenv("ANDROID_KEYSTORE_PASSWORD")
             keyAlias = System.getenv("ANDROID_KEY_ALIAS")
             keyPassword = System.getenv("ANDROID_KEY_PASSWORD")
