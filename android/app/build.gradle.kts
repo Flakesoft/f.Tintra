@@ -23,12 +23,7 @@ android {
 
     signingConfigs {
         create("release") {
-            val keystorePath = System.getenv("ANDROID_KEYSTORE_PATH")
-
-            if (keystorePath != null) {
-                storeFile = file("android/app/$keystorePath")
-            }
-
+            storeFile = file(System.getenv("ANDROID_KEYSTORE_PATH"))
             storePassword = System.getenv("ANDROID_KEYSTORE_PASSWORD")
             keyAlias = System.getenv("ANDROID_KEY_ALIAS")
             keyPassword = System.getenv("ANDROID_KEY_PASSWORD")
