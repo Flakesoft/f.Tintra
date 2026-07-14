@@ -28,7 +28,7 @@ jobs:
 
       - name: Decode Android keystore
         run: |
-          echo "${{ secrets.ANDROID_KEYSTORE }}" | base64 --decode > android/app/ftintra.jks
+          echo "${{ secrets.ANDROID_KEYSTORE }}" | base64 --decode > ftintra.jks
 
       - name: Get dependencies
         run: flutter pub get
@@ -38,7 +38,7 @@ jobs:
 
       - name: Build APK
         env:
-          ANDROID_KEYSTORE_PATH: android/app/ftintra.jks
+          ANDROID_KEYSTORE_PATH: ftintra.jks
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           ANDROID_KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           ANDROID_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
@@ -52,4 +52,4 @@ jobs:
 
       - name: Remove keystore
         if: always()
-        run: rm -f android/app/ftintra.jks
+        run: rm -f ftintra.jks
