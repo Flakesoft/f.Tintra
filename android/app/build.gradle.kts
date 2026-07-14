@@ -15,7 +15,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.f_tintra"
+    namespace = "com.flakesoft.tintra"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
