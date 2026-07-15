@@ -29,6 +29,8 @@ Built with Flutter and designed with Material 3.
 
 [GitHub Releases](https://github.com/Flakesoft/f.Tintra/releases)
 
+You need at least Android 7 to install this app.
+
 ## License
 
 Licensed under the GNU General Public License v3.0.
