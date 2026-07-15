@@ -6,7 +6,7 @@ f.Tintra is a free and open-source color picker for Android. Simply open an imag
 
 Built with Flutter and designed with Material 3.
 
-Features
+## Features
 
 - 🎨 Pick any color from an image
 - 📷 Open images from your device
@@ -19,28 +19,28 @@ Features
 - 🔒 No tracking
 - 🆓 100% Free and Open Source
 
-Screenshots
+## Screenshots
 
 Coming soon.
 
-Download
+## Download
 
 Coming soon.
 
-License
+## License
 
 Licensed under the GNU General Public License v3.0.
 
 See the LICENSE file for details.
 
-Built with
+## Built with
 
 - Flutter
 - Material 3
 - image
 - image_picker
 
-Roadmap
+## Roadmap
 
 Version 1.1
 
@@ -49,12 +49,12 @@ Version 1.1
 - UI improvements
 - Additional color formats
 
-Contributing
+## Contributing
 
 Contributions, bug reports and feature suggestions are welcome.
 
 Please open an Issue before submitting major changes.
 
-About Flakesoft
+## About Flakesoft
 
 f.Tintra is developed by Flakesoft, an open-source software project focused on creating simple, modern and privacy-friendly applications.
