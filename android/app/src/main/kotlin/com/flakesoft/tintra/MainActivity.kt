@@ -1,4 +1,4 @@
-package com.example.f_tintra
+package com.flakesoft.tintra
 
 import io.flutter.embedding.android.FlutterActivity
 
