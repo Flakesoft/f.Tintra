@@ -27,7 +27,7 @@ Built with Flutter and designed with Material 3.
 
 ## Download
 
-Coming soon.
+[GitHub Releases](https://github.com/Flakesoft/f.Tintra/releases)
 
 ## License
 
