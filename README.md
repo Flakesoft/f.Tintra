@@ -21,7 +21,7 @@ Built with Flutter and designed with Material 3.
 
 ## Screenshots
 
-Coming soon.
+<img width="300" alt="Screenshot_2026-07-15-17-40-08-797_com flakesoft tintra" src="https://github.com/user-attachments/assets/2374c4db-3b95-43d9-9368-45b923ae899e" /> <img width="300" alt="Screenshot_2026-07-15-17-40-23-074_com flakesoft tintra" src="https://github.com/user-attachments/assets/91a13409-6140-423d-b173-216faaa413ff" /> <img width="300" alt="Screenshot_2026-07-15-17-42-40-321_com flakesoft tintra" src="https://github.com/user-attachments/assets/6411a1a4-8576-4b19-9c3e-76581a3e9f58" /> <img width="300" alt="Screenshot_2026-07-15-17-43-15-434_com flakesoft tintra" src="https://github.com/user-attachments/assets/e53cc3aa-4bfb-4c29-8b98-4d825869754c" />
 
 ## Download
 
