@@ -1,46 +1,27 @@
-Picking colors just got better.
+f.Tintra is a simple, fast, and open-source color picker for Android.
 
-f.Tintra is a free and open-source color picker for Android. Simply open an image, tap any pixel, and instantly copy its color in HEX or RGB format.
-
-Built with Flutter and designed with Material 3.
+Select any image from your device, tap anywhere on it, and instantly get the exact color of that pixel. Copy HEX and RGB values with a single tap and use them in your designs, themes, websites, or applications.
 
 Features
 
-- 🎨 Pick any color from an image
-- 📷 Open images from your device
-- 🔍 Accurate pixel color detection
-- #️⃣ Copy HEX values
-- 🌈 Copy RGB values
-- 🌙 Automatic light and dark mode
-- 🎨 Dynamic Color support on Android 12+
-- 🚫 No ads
-- 🔒 No tracking
-- 🆓 100% Free and Open Source
+• Pick colors from any image
+• Accurate pixel-by-pixel color detection
+• Copy HEX color values
+• Copy RGB color values
+• Material 3 interface
+• Dynamic Color support on Android 12+
+• Light and dark mode support
+• Free and open source
 
-License
+Privacy
 
-Licensed under the GNU General Public License v3.0.
+f.Tintra works entirely on your device.
 
-Built with
+• No ads
+• No tracking
+• No analytics
+• No internet connection required
 
-- Flutter
-- Material 3
-- image
-- image_picker
+Open Source
 
-Roadmap
-
-Version 1.1
-
-- Adaptive launcher icon
-- F-Droid Fastlane metadata
-- UI improvements
-- Additional color formats
-
-Contributing
-
-Contributions, bug reports and feature suggestions are welcome.
-
-About Flakesoft
-
-f.Tintra is developed by Flakesoft, an open-source software project focused on creating simple, modern and privacy-friendly applications.
+The source code is available on GitHub under the GNU General Public License v3.0 (GPL-3.0).
