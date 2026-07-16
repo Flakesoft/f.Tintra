@@ -1,0 +1,27 @@
+🎉 Initial Release
+
+The first stable release of f.Tintra is here!
+
+Features
+
+- 🎨 Pick colors directly from images
+- 📷 Import images from your device
+- 🔍 Accurate pixel color detection
+- #️⃣ View and copy HEX color values
+- 🌈 View and copy RGB color values
+- 🌙 Automatic light and dark mode support
+- 🎨 Dynamic Color support on Android 12+
+- 🚫 No ads
+- 🔒 No tracking
+
+Technical
+
+- Built with Flutter and Material 3
+- Licensed under GNU GPL v3.0
+
+Known limitations
+
+- Adaptive launcher icon support is planned for a future release.
+- More color formats and advanced tools are planned for future versions.
+
+Thank you for trying f.Tintra! 💙
