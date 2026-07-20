@@ -1,0 +1,26 @@
+name: Mirror repositories
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Push to GitLab
+        run: |
+          git remote add gitlab https://${{ secrets.GITLAB_USERNAME }}:${{ secrets.GITLAB_TOKEN }}@gitlab.com/Flakesoft/f.Tintra.git
+          git push --mirror gitlab
+
+      - name: Push to Codeberg
+        run: |
+          git remote add codeberg https://${{ secrets.CODEBERG_USERNAME }}:${{ secrets.CODEBERG_TOKEN }}@codeberg.org/Flakesoft/f.Tintra.git
+          git push --mirror codeberg
