@@ -56,22 +56,55 @@ class _HomeScreenState extends State<HomeScreen> {
   void _onImageTap(TapDownDetails details) {
     if (imageState == null) return;
 
-    final imageSize =
-        MediaQuery.of(context).size.width > 600
-            ? 500.0
-            : MediaQuery.of(context).size.width * 0.8;
+    final screenWidth =
+        MediaQuery.of(context).size.width;
 
-    final scaleX =
-        imageState!.image.width / imageSize;
+    final maxImageWidth =
+        screenWidth > 700
+            ? 600.0
+            : screenWidth * 0.9;
 
-    final scaleY =
-        imageState!.image.height / imageSize;
+    final maxImageHeight =
+        MediaQuery.of(context).size.height * 0.55;
+
+    final imageWidth =
+        imageState!.image.width.toDouble();
+
+    final imageHeight =
+        imageState!.image.height.toDouble();
+
+    final widthScale =
+        maxImageWidth / imageWidth;
+
+    final heightScale =
+        maxImageHeight / imageHeight;
+
+    final scale =
+        widthScale < heightScale
+            ? widthScale
+            : heightScale;
+
+    final displayedWidth =
+        imageWidth * scale;
+
+    final displayedHeight =
+        imageHeight * scale;
+
+    final offsetX =
+        (maxImageWidth - displayedWidth) / 2;
+
+    final offsetY =
+        (maxImageHeight - displayedHeight) / 2;
 
     final x =
-        (details.localPosition.dx * scaleX).toInt();
+        ((details.localPosition.dx - offsetX) /
+                scale)
+            .toInt();
 
     final y =
-        (details.localPosition.dy * scaleY).toInt();
+        ((details.localPosition.dy - offsetY) /
+                scale)
+            .toInt();
 
     if (x < 0 ||
         y < 0 ||
@@ -80,7 +113,8 @@ class _HomeScreenState extends State<HomeScreen> {
       return;
     }
 
-    final pixel = imageState!.image.getPixel(x, y);
+    final pixel =
+        imageState!.image.getPixel(x, y);
 
     final color = Color.fromARGB(
       pixel.a.toInt(),
@@ -90,7 +124,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
 
     setState(() {
-      imageState = imageState!.copyWith(
+      imageState =
+          imageState!.copyWith(
         selectedColor: color,
       );
     });
@@ -98,12 +133,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
+    final screenWidth =
+        MediaQuery.of(context).size.width;
 
-    final imageSize =
-        screenWidth > 600
-            ? 500.0
-            : screenWidth * 0.8;
+    final maxImageWidth =
+        screenWidth > 700
+            ? 600.0
+            : screenWidth * 0.9;
+
+    final maxImageHeight =
+        MediaQuery.of(context).size.height * 0.55;
 
     return Scaffold(
       appBar: AppBar(
@@ -158,11 +197,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                     BorderRadius.circular(
                                   20,
                                 ),
-                                child: Image.memory(
-                                  imageState!.previewBytes,
-                                  height: imageSize,
-                                  width: imageSize,
-                                  fit: BoxFit.contain,
+                                child: ConstrainedBox(
+                                  constraints:
+                                      BoxConstraints(
+                                    maxWidth:
+                                        maxImageWidth,
+                                    maxHeight:
+                                        maxImageHeight,
+                                  ),
+                                  child:
+                                      Image.memory(
+                                    imageState!
+                                        .previewBytes,
+                                    fit:
+                                        BoxFit.contain,
+                                  ),
                                 ),
                               ),
                             )
