@@ -4,6 +4,8 @@
 
 Picking colors just got better.
 
+<img width="1024" height="1024" alt="image" src="https://github.com/user-attachments/assets/cc1233d3-1370-4e89-bc50-7cd36eb6e854" />
+
 f.Tintra is a free and open-source color picker for Android. Simply open an image, tap any pixel, and instantly copy its color in HEX or RGB format.
 
 Built with Flutter and designed with Material 3.
