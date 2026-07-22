@@ -1,10 +1,6 @@
-# f.Tintra
-
 [![Build](https://github.com/Flakesoft/f.Tintra/actions/workflows/build.yml/badge.svg)](https://github.com/Flakesoft/f.Tintra/actions/workflows/build.yml) ![GitHub License](https://img.shields.io/github/license/Flakesoft/f.Tintra) ![GitHub Stars](https://img.shields.io/github/stars/Flakesoft/f.Tintra?style=social) ![GitHub Release](https://img.shields.io/github/v/release/Flakesoft/f.Tintra) ![Platform](https://img.shields.io/badge/platform-Android-green) ![Flutter](https://img.shields.io/badge/Flutter-3.x-02569B?logo=flutter) ![Open Source](https://img.shields.io/badge/Open%20Source-Yes-brightgreen)
 
 <img width="300" alt="image" src="https://github.com/user-attachments/assets/529333f7-a765-42c3-87be-e68f2877c88e" />
-
-Picking colors just got better.
 
 f.Tintra is a free and open-source color picker for Android. Simply open an image, tap any pixel, and instantly copy its color in HEX or RGB format.
 
