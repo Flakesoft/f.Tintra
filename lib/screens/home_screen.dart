@@ -16,6 +16,8 @@ class _HomeScreenState extends State<HomeScreen> {
   ImageState? imageState;
   bool isLoading = false;
 
+  final GlobalKey _imageKey = GlobalKey();
+
   Future<void> _selectImage() async {
     final imageFile = await ImagePickerService.pickImage();
 
@@ -56,54 +58,27 @@ class _HomeScreenState extends State<HomeScreen> {
   void _onImageTap(TapDownDetails details) {
     if (imageState == null) return;
 
-    final screenWidth =
-        MediaQuery.of(context).size.width;
+    final renderBox =
+        _imageKey.currentContext?.findRenderObject()
+            as RenderBox?;
 
-    final maxImageWidth =
-        screenWidth > 700
-            ? 600.0
-            : screenWidth * 0.9;
+    if (renderBox == null) return;
 
-    final maxImageHeight =
-        MediaQuery.of(context).size.height * 0.55;
+    final displayedSize = renderBox.size;
 
-    final imageWidth =
-        imageState!.image.width.toDouble();
-
-    final imageHeight =
-        imageState!.image.height.toDouble();
-
-    final widthScale =
-        maxImageWidth / imageWidth;
-
-    final heightScale =
-        maxImageHeight / imageHeight;
-
-    final scale =
-        widthScale < heightScale
-            ? widthScale
-            : heightScale;
-
-    final displayedWidth =
-        imageWidth * scale;
-
-    final displayedHeight =
-        imageHeight * scale;
-
-    final offsetX =
-        (maxImageWidth - displayedWidth) / 2;
-
-    final offsetY =
-        (maxImageHeight - displayedHeight) / 2;
+    final localPosition =
+        details.localPosition;
 
     final x =
-        ((details.localPosition.dx - offsetX) /
-                scale)
+        (localPosition.dx *
+                imageState!.image.width /
+                displayedSize.width)
             .toInt();
 
     final y =
-        ((details.localPosition.dy - offsetY) /
-                scale)
+        (localPosition.dy *
+                imageState!.image.height /
+                displayedSize.height)
             .toInt();
 
     if (x < 0 ||
@@ -192,26 +167,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                   const ValueKey('image'),
                               onTapDown:
                                   _onImageTap,
-                              child: ClipRRect(
-                                borderRadius:
-                                    BorderRadius.circular(
-                                  20,
+                              child: ConstrainedBox(
+                                constraints:
+                                    BoxConstraints(
+                                  maxWidth:
+                                      maxImageWidth,
+                                  maxHeight:
+                                      maxImageHeight,
                                 ),
-                                child: ConstrainedBox(
-                                  constraints:
-                                      BoxConstraints(
-                                    maxWidth:
-                                        maxImageWidth,
-                                    maxHeight:
-                                        maxImageHeight,
-                                  ),
-                                  child:
-                                      Image.memory(
-                                    imageState!
-                                        .previewBytes,
-                                    fit:
-                                        BoxFit.contain,
-                                  ),
+                                child: Image.memory(
+                                  key:
+                                      _imageKey,
+                                  imageState!
+                                      .previewBytes,
+                                  fit:
+                                      BoxFit.contain,
                                 ),
                               ),
                             )
