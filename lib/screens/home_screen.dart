@@ -18,6 +18,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final GlobalKey _imageKey = GlobalKey();
 
+  final TransformationController _transformationController =
+      TransformationController();
+
+  @override
+  void dispose() {
+    _transformationController.dispose();
+    super.dispose();
+  }
+
   Future<void> _selectImage() async {
     final imageFile = await ImagePickerService.pickImage();
 
@@ -43,6 +52,9 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     if (!mounted) return;
+
+    _transformationController.value =
+        Matrix4.identity();
 
     setState(() {
       imageState = ImageState(
@@ -124,24 +136,31 @@ class _HomeScreenState extends State<HomeScreen> {
         title: const Text('f.Tintra'),
         centerTitle: true,
       ),
+
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
+
           child: ConstrainedBox(
             constraints: const BoxConstraints(
               maxWidth: 700,
             ),
+
             child: Column(
               mainAxisAlignment:
                   MainAxisAlignment.center,
+
               children: [
                 AnimatedSwitcher(
                   duration:
                       const Duration(milliseconds: 250),
+
                   child: isLoading
+
                       ? Column(
                           key:
                               const ValueKey('loading'),
+
                           children: [
                             Icon(
                               Icons.hourglass_top,
@@ -151,7 +170,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                       .colorScheme
                                       .primary,
                             ),
+
                             const SizedBox(height: 20),
+
                             Text(
                               'Loading image...',
                               style:
@@ -161,35 +182,55 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ],
                         )
+
                       : imageState != null
+
                           ? GestureDetector(
                               key:
                                   const ValueKey('image'),
+
                               onTapDown:
                                   _onImageTap,
-                              child: ConstrainedBox(
-                                constraints:
-                                    BoxConstraints(
-                                  maxWidth:
-                                      maxImageWidth,
-                                  maxHeight:
-                                      maxImageHeight,
-                                ),
-                                child: Image.memory(
-                                  key:
-                                      _imageKey,
-                                  imageState!
-                                      .previewBytes,
-                                  fit:
-                                      BoxFit.contain,
+
+                              child: SizedBox(
+                                width:
+                                    maxImageWidth,
+
+                                height:
+                                    maxImageHeight,
+
+                                child: InteractiveViewer(
+                                  transformationController:
+                                      _transformationController,
+
+                                  minScale:
+                                      1.0,
+
+                                  maxScale:
+                                      5.0,
+
+                                  child: Image.memory(
+                                    key:
+                                        _imageKey,
+
+                                    imageState!
+                                        .previewBytes,
+
+                                    fit:
+                                        BoxFit.contain,
+                                  ),
                                 ),
                               ),
                             )
+
                           : Icon(
                               Icons.colorize,
+
                               key:
                                   const ValueKey('empty'),
+
                               size: 96,
+
                               color:
                                   Theme.of(context)
                                       .colorScheme
@@ -200,13 +241,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(height: 24),
 
                 if (imageState?.selectedColor != null)
+
                   ColorInfoCard(
                     color:
                         imageState!.selectedColor!,
                   )
+
                 else if (imageState != null)
+
                   Text(
                     'Tap the image to pick a color',
+
                     style:
                         Theme.of(context)
                             .textTheme
@@ -216,17 +261,21 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(height: 32),
 
                 FilledButton.icon(
+
                   onPressed:
                       isLoading
                           ? null
                           : _selectImage,
+
                   icon:
                       const Icon(Icons.image),
-                  label: Text(
-                    imageState == null
-                        ? 'Select image'
-                        : 'Choose another image',
-                  ),
+
+                  label:
+                      Text(
+                        imageState == null
+                            ? 'Select image'
+                            : 'Choose another image',
+                      ),
                 ),
               ],
             ),
