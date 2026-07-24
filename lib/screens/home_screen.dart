@@ -67,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  void _onImageTap(TapDownDetails details) {
+  void _onImageTap(TapUpDetails details) {
     if (imageState == null) return;
 
     final renderBox =
@@ -217,15 +217,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
                                     boundaryMargin:
                                         const EdgeInsets.all(
-                                      100,
+                                      50,
                                     ),
 
                                     clipBehavior:
-                                        Clip.none,
+                                        Clip.hardEdge,
 
                                     child:
                                         GestureDetector(
-                                      onTapDown:
+                                      onTapUp:
                                           _onImageTap,
 
                                       child:
@@ -293,7 +293,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(height: 32),
 
                 FilledButton.icon(
-
                   onPressed:
                       isLoading
                           ? null
