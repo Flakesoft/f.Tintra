@@ -185,42 +185,74 @@ class _HomeScreenState extends State<HomeScreen> {
 
                       : imageState != null
 
-                          ? GestureDetector(
+                          ? Column(
                               key:
                                   const ValueKey('image'),
 
-                              onTapDown:
-                                  _onImageTap,
+                              children: [
+                                SizedBox(
+                                  width:
+                                      maxImageWidth,
 
-                              child: SizedBox(
-                                width:
-                                    maxImageWidth,
+                                  height:
+                                      maxImageHeight,
 
-                                height:
-                                    maxImageHeight,
+                                  child:
+                                      InteractiveViewer(
 
-                                child: InteractiveViewer(
-                                  transformationController:
-                                      _transformationController,
+                                    transformationController:
+                                        _transformationController,
 
-                                  minScale:
-                                      1.0,
+                                    minScale:
+                                        0.8,
 
-                                  maxScale:
-                                      5.0,
+                                    maxScale:
+                                        5.0,
 
-                                  child: Image.memory(
-                                    key:
-                                        _imageKey,
+                                    panEnabled:
+                                        true,
 
-                                    imageState!
-                                        .previewBytes,
+                                    scaleEnabled:
+                                        true,
 
-                                    fit:
-                                        BoxFit.contain,
+                                    boundaryMargin:
+                                        const EdgeInsets.all(
+                                      100,
+                                    ),
+
+                                    clipBehavior:
+                                        Clip.none,
+
+                                    child:
+                                        GestureDetector(
+                                      onTapDown:
+                                          _onImageTap,
+
+                                      child:
+                                          Image.memory(
+                                        key:
+                                            _imageKey,
+
+                                        imageState!
+                                            .previewBytes,
+
+                                        fit:
+                                            BoxFit.contain,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
+
+                                const SizedBox(height: 8),
+
+                                Text(
+                                  'Pinch to zoom • Move with two fingers',
+                                  style:
+                                      Theme.of(context)
+                                          .textTheme
+                                          .bodySmall,
+                                ),
+                              ],
                             )
 
                           : Icon(
